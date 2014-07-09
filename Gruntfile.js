@@ -36,7 +36,7 @@ module.exports = function (grunt) {
                 expand: true,
                 cwd: '<%= yeoman.app %>',
                 dest: '.tmp',
-                src: '*.jade',
+                src: ['*.jade', 'views/*.jade'],
                 ext: '.html'
             }]
         }
