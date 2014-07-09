@@ -1,8 +1,8 @@
 {
   "name": "dondi",
   "version": "0.0.0",
-  "dependencies": {},
-  "devDependencies": {
+  "devDependencies": {},
+  "dependencies": {
     "grunt": "^0.4.1",
     "grunt-cli": "^0.4.1",
     "grunt-autoprefixer": "^0.7.3",
@@ -41,6 +41,7 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "postinstall": "echo postinstall time"
   }
 }
