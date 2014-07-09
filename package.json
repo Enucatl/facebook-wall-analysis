@@ -43,6 +43,6 @@
   },
   "scripts": {
     "test": "grunt test",
-    "postinstall": "echo postinstall time"
+    "postinstall": "bower install"
   }
 }
