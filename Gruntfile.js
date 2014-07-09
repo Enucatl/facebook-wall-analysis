@@ -27,6 +27,20 @@ module.exports = function (grunt) {
     // Project settings
     yeoman: appConfig,
 
+    jade: {
+        dist: {
+            options: {
+                pretty: true
+            },
+            files: [{
+                expand: true,
+                cwd: '<%= yeoman.app %>',
+                dest: '.tmp',
+                src: '*.jade',
+                ext: '.html'
+            }]
+        }
+    },
     // Watches files for changes and runs tasks based on the changed files
     watch: {
       jade: {
@@ -241,7 +255,7 @@ module.exports = function (grunt) {
     // concat, minify and revision files. Creates configurations in memory so
     // additional tasks can operate on them
     useminPrepare: {
-      html: '<%= yeoman.app %>/index.html',
+      html: '.tmp/index.html',
       options: {
         dest: '<%= yeoman.dist %>',
         flow: {
@@ -324,7 +338,7 @@ module.exports = function (grunt) {
         },
         files: [{
           expand: true,
-          cwd: '<%= yeoman.dist %>',
+          cwd: '.tmp',
           src: ['*.html', 'views/{,*/}*.html'],
           dest: '<%= yeoman.dist %>'
         }]

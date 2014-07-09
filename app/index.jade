@@ -1,25 +1,18 @@
-!!! 5
+doctype html
 html.no-js
 head
   meta(charset='utf-8')
-    title
-    meta(name='description', content='')
-    meta(name='viewport', content='width=device-width')
-    //
-       Place favicon.ico and apple-touch-icon.png in the root directory 
-    //
-       build:css(.) styles/vendor.css 
-    //
-       bower:css 
-    //
-       endbower 
-    //
-       endbuild 
-    //
-       build:css(.tmp) styles/main.css 
-    link(rel='stylesheet', href='styles/main.css')
-    //
-       endbuild 
+  title
+  meta(name='description', content='')
+  meta(name='viewport', content='width=device-width')
+  // Place favicon.ico and apple-touch-icon.png in the root directory 
+  // build:css(.) styles/vendor.css 
+  // bower:css 
+  // endbower 
+  // endbuild 
+  // build:css(.tmp) styles/main.css 
+  link(rel='stylesheet', href='styles/main.css')
+  // endbuild 
   body(ng-app='dondiApp')
     //if lt IE 7
       p.browsehappy
@@ -28,8 +21,7 @@ head
         | browser. Please
         a(href='http://browsehappy.com/') upgrade your browser
         | to improve your experience.
-    //
-       Add your site or application content here 
+    // Add your site or application content here 
     .container
       .header
         ul.nav.nav-pills.pull-right
@@ -45,17 +37,13 @@ head
         p
           span.glyphicon.glyphicon-heart
           | from the Yeoman team
-    //
-       build:js(.) scripts/oldieshim.js 
+    // build:js(.) scripts/oldieshim.js 
     //if lt IE 9
       script(src='bower_components/es5-shim/es5-shim.js')
       script(src='bower_components/json3/lib/json3.min.js')
-    //
-       endbuild 
-    //
-       build:js(.) scripts/vendor.js 
-    //
-       bower:js 
+    // endbuild 
+    // build:js(.) scripts/vendor.js 
+    // bower:js 
     script(src='bower_components/jquery/dist/jquery.js')
     script(src='bower_components/angular/angular.js')
     script(src='bower_components/json3/lib/json3.js')
@@ -77,15 +65,10 @@ head
     script(src='bower_components/angular-animate/angular-animate.js')
     script(src='bower_components/angular-touch/angular-touch.js')
     script(src='bower_components/angular-route/angular-route.js')
-    //
-       endbower 
-    //
-       endbuild 
-    //
-       build:js({.tmp,app}) scripts/scripts.js 
+    // endbower 
+    // endbuild 
+    // build:js({.tmp,app}) scripts/scripts.js 
     script(src='scripts/app.js')
     script(src='scripts/controllers/main.js')
     script(src='scripts/controllers/about.js')
-    //
-       endbuild 
-
+    // endbuild 
