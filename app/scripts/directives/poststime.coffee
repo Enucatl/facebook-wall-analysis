@@ -9,7 +9,8 @@
 angular.module 'dondiApp' 
     .directive 'postsTime', [
         "d3Service"
-        (d3Service) ->
+        "scatterTime"
+        (d3Service, scatterTime) ->
             restrict: 'E'
             scope: {
                 data: "=feedContent"
@@ -19,4 +20,7 @@ angular.module 'dondiApp'
                     scope.data.success (json) ->
                         console.log d3.range 10
                         console.log json.length, "inside directive"
+                        console.log scatterTime
+                        scatterTime.scatterTime()
+                            .x_value (d) -> d.created_time
         ]

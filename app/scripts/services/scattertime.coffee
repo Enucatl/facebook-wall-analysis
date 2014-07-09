@@ -11,250 +11,254 @@ angular.module('dondiApp')
     .factory 'scatterTime', [
         "d3Service"
         (d3Service) ->
-            d3Service.d3().then (d3) ->
-                margin = {top: 20, right: 20, bottom: 40, left: 70}
-                width = 900
-                height = 600
-                radius = 3
-                legend_square_size = 18
-                x_value = (d, i) -> d[0]
-                y_value = (d, i) -> d[1]
-                color_value = (d) -> d.name
-                x_scale = d3.scale.linear()
-                y_scale = d3.scale.linear()
-                color_scale = d3.scale.category20()
-                x_axis = d3.svg.axis()
-                    .scale x_scale
-                    .orient "bottom"
-                y_axis = d3.svg.axis()
-                    .scale y_scale
-                    .orient "left"
-                x_title = undefined
-                y_title = undefined
-                chart = (selection) ->
-                    selection.each (data) ->
-                            
-                        #get unique color names
-                        color_names = (data.map color_value).filter (d, i, self) ->
-                            self.indexOf d == i
+            {
+                scatterTime: ->
+                    d3Service.d3().then (d3) ->
+                        margin = {top: 20, right: 20, bottom: 40, left: 70}
+                        width = 900
+                        height = 600
+                        radius = 3
+                        legend_square_size = 18
+                        x_value = (d, i) -> d[0]
+                        y_value = (d, i) -> d[1]
+                        color_value = (d) -> d.name
+                        x_scale = d3.scale.linear()
+                        y_scale = d3.scale.linear()
+                        color_scale = d3.scale.category20()
+                        x_axis = d3.svg.axis()
+                            .scale x_scale
+                            .orient "bottom"
+                        y_axis = d3.svg.axis()
+                            .scale y_scale
+                            .orient "left"
+                        x_title = undefined
+                        y_title = undefined
 
-                        color_scale.domain color_names
+                        chart = (selection) ->
+                            selection.each (data) ->
+                                    
+                                #get unique color names
+                                color_names = (data.map color_value).filter (d, i, self) ->
+                                    self.indexOf d == i
 
-                        #convert to standard format
-                        data = data.map (d, i) ->
-                            {
-                                values: d.values.map (e, j) ->
+                                color_scale.domain color_names
+
+                                #convert to standard format
+                                data = data.map (d, i) ->
                                     {
-                                        color: color_value(d)
-                                        x: x_value.call(d.values, e, j),
-                                        y: y_value.call(d.values, e, j)
+                                        values: d.values.map (e, j) ->
+                                            {
+                                                color: color_value(d)
+                                                x: x_value.call(d.values, e, j),
+                                                y: y_value.call(d.values, e, j)
+                                            }
                                     }
-                            }
 
-                        #flatten the structure
-                        data = (data.map (d) -> d.values).reduce (a, b) -> a.concat b
+                                #flatten the structure
+                                data = (data.map (d) -> d.values).reduce (a, b) -> a.concat b
 
-                        #update scales
-                        x_scale
-                            .range [0, width - margin.left - margin.right]
-                        y_scale
-                            .range [height - margin.top - margin.bottom, 0]
+                                #update scales
+                                x_scale
+                                    .range [0, width - margin.left - margin.right]
+                                y_scale
+                                    .range [height - margin.top - margin.bottom, 0]
 
-                        #select the svg if it exists
-                        svg = d3.select this
-                            .selectAll "svg"
-                            .data [data]
+                                #select the svg if it exists
+                                svg = d3.select this
+                                    .selectAll "svg"
+                                    .data [data]
 
-                        #otherwise create the skeletal chart
-                        g_enter = svg.enter()
-                            .append "svg"
-                            .append "g"
-                        g_enter.append "g"
-                            .classed "x axis", true
-                            .append "text"
-                            .classed "label", true
-                            .attr "x", width - margin.right - margin.left
-                            .attr "y", margin.bottom - 6
-                            .style "text-anchor", "end"
-                            .text x_title
-                        g_enter.append "g"
-                            .classed "y axis", true
-                            .append "text"
-                            .classed "label", true
-                            .attr "y", -margin.left
-                            .attr "transform", "rotate(-90)"
-                            .attr "dy", "2em"
-                            .style "text-anchor", "end"
-                            .text y_title
-                        g_enter.append "g"
-                            .classed "circles", true
-                        g_enter.append "g"
-                            .classed "legends", true
-
-                        #update the dimensions
-                        svg
-                            .attr "width", width
-                            .attr "height", height
-
-                        #update position
-                        g = svg.select "g"
-                            .attr "transform", "translate(#{margin.left}, #{margin.top})"
-
-                        #update circles
-                        circles = g.select ".circles"
-                            .selectAll ".circle"
-                            .data (d) -> d
-
-                        circles
-                            .enter()
-                            .append "circle"
-                            .classed "circle", true
-
-                        circles
-                            .transition()
-                            .duration(500)
-                            .attr "r", radius
-                            .attr "cx", (d) -> x_scale(d.x)
-                            .attr "cy", (d) -> y_scale(d.y)
-                            .style "fill", (d) -> color_scale(d.color)
-
-                        circles
-                            .exit()
-                            .remove()
-
-                        #update legend
-                        legends = g.select "g.legends"
-                            .selectAll "g.legend"
-                            .data color_scale.domain()
-
-                        l_enter = legends
-                            .enter()
-                            .append "g"
-                            .classed "legend", true
-
-                        legends
-                            .each (d) ->
-                                rects = d3.select this
-                                    .selectAll "rect"
-                                    .data [d]
-                                rects.enter()
-                                    .append "rect"
-                                    .attr "x", width - margin.right - margin.left - legend_square_size
-                                    .attr "width", legend_square_size
-                                    .attr "height", legend_square_size
-                                rects
-                                    .style "fill", color_scale
-                                texts = d3.select this
-                                    .selectAll "text"
-                                    .data [d]
-                                texts.enter()
+                                #otherwise create the skeletal chart
+                                g_enter = svg.enter()
+                                    .append "svg"
+                                    .append "g"
+                                g_enter.append "g"
+                                    .classed "x axis", true
                                     .append "text"
-                                    .attr "x", width - margin.right - margin.left - legend_square_size - 2
-                                    .attr "y", 9
-                                    .attr "dy", legend_square_size / 2
+                                    .classed "label", true
+                                    .attr "x", width - margin.right - margin.left
+                                    .attr "y", margin.bottom - 6
                                     .style "text-anchor", "end"
-                                texts
-                                    .text (d) -> d
+                                    .text x_title
+                                g_enter.append "g"
+                                    .classed "y axis", true
+                                    .append "text"
+                                    .classed "label", true
+                                    .attr "y", -margin.left
+                                    .attr "transform", "rotate(-90)"
+                                    .attr "dy", "2em"
+                                    .style "text-anchor", "end"
+                                    .text y_title
+                                g_enter.append "g"
+                                    .classed "circles", true
+                                g_enter.append "g"
+                                    .classed "legends", true
 
-                        legends
-                            .attr "transform", (d, i) -> "translate(0, #{(legend_square_size + 2) * i})"
+                                #update the dimensions
+                                svg
+                                    .attr "width", width
+                                    .attr "height", height
 
-                        legends
-                            .exit()
-                            .remove()
+                                #update position
+                                g = svg.select "g"
+                                    .attr "transform", "translate(#{margin.left}, #{margin.top})"
 
-                        #update axes
-                        g.select ".x.axis"
-                            .attr "transform", "translate(0, #{y_scale.range()[0]})"
-                            .call x_axis
+                                #update circles
+                                circles = g.select ".circles"
+                                    .selectAll ".circle"
+                                    .data (d) -> d
 
-                        g.select ".y.axis"
-                            .transition()
-                            .call y_axis
+                                circles
+                                    .enter()
+                                    .append "circle"
+                                    .classed "circle", true
 
-                chart.width = (value) ->
-                    if not arguments.length
-                        return width
-                    width = value
-                    chart
+                                circles
+                                    .transition()
+                                    .duration(500)
+                                    .attr "r", radius
+                                    .attr "cx", (d) -> x_scale(d.x)
+                                    .attr "cy", (d) -> y_scale(d.y)
+                                    .style "fill", (d) -> color_scale(d.color)
 
-                chart.height = (value) ->
-                    if not arguments.length
-                        return height
-                    height = value
-                    chart
+                                circles
+                                    .exit()
+                                    .remove()
 
-                chart.margin = (value) ->
-                    if not arguments.length
-                        return margin
-                    margin = value
-                    chart
+                                #update legend
+                                legends = g.select "g.legends"
+                                    .selectAll "g.legend"
+                                    .data color_scale.domain()
 
-                chart.x_value = (value) ->
-                    if not arguments.length
-                        return x_value
-                    x_value = value
-                    chart
+                                l_enter = legends
+                                    .enter()
+                                    .append "g"
+                                    .classed "legend", true
 
-                chart.color_value = (value) ->
-                    if not arguments.length
-                        return color_value
-                    color_value = value
-                    chart
+                                legends
+                                    .each (d) ->
+                                        rects = d3.select this
+                                            .selectAll "rect"
+                                            .data [d]
+                                        rects.enter()
+                                            .append "rect"
+                                            .attr "x", width - margin.right - margin.left - legend_square_size
+                                            .attr "width", legend_square_size
+                                            .attr "height", legend_square_size
+                                        rects
+                                            .style "fill", color_scale
+                                        texts = d3.select this
+                                            .selectAll "text"
+                                            .data [d]
+                                        texts.enter()
+                                            .append "text"
+                                            .attr "x", width - margin.right - margin.left - legend_square_size - 2
+                                            .attr "y", 9
+                                            .attr "dy", legend_square_size / 2
+                                            .style "text-anchor", "end"
+                                        texts
+                                            .text (d) -> d
 
-                chart.y_value = (value) ->
-                    if not arguments.length
-                        return y_value
-                    y_value = value
-                    chart
+                                legends
+                                    .attr "transform", (d, i) -> "translate(0, #{(legend_square_size + 2) * i})"
 
-                chart.x_title = (value) ->
-                    if not arguments.length
-                        return x_title
-                    x_title = value
-                    chart
+                                legends
+                                    .exit()
+                                    .remove()
 
-                chart.y_title = (value) ->
-                    if not arguments.length
-                        return y_title
-                    y_title = value
-                    chart
+                                #update axes
+                                g.select ".x.axis"
+                                    .attr "transform", "translate(0, #{y_scale.range()[0]})"
+                                    .call x_axis
 
-                chart.legend_square_size = (value) ->
-                    if not arguments.length
-                        return legend_square_size
-                    legend_square_size = value
-                    chart
+                                g.select ".y.axis"
+                                    .transition()
+                                    .call y_axis
 
-                chart.radius = (value) ->
-                    if not arguments.length
-                        return radius
-                    radius = value
-                    chart
+                        chart.width = (value) ->
+                            if not arguments.length
+                                return width
+                            width = value
+                            chart
 
-                chart.x_axis = (value) ->
-                    if not arguments.length
-                        return x_axis
-                    x_axis = value
-                    chart
+                        chart.height = (value) ->
+                            if not arguments.length
+                                return height
+                            height = value
+                            chart
 
-                chart.y_axis = (value) ->
-                    if not arguments.length
-                        return y_axis
-                    y_axis = value
-                    chart
+                        chart.margin = (value) ->
+                            if not arguments.length
+                                return margin
+                            margin = value
+                            chart
 
-                chart.x_scale = (value) ->
-                    if not arguments.length
-                        return x_scale
-                    x_scale = value
-                    chart
+                        chart.x_value = (value) ->
+                            if not arguments.length
+                                return x_value
+                            x_value = value
+                            chart
 
-                chart.y_scale = (value) ->
-                    if not arguments.length
-                        return y_scale
-                    y_scale = value
-                    chart
+                        chart.color_value = (value) ->
+                            if not arguments.length
+                                return color_value
+                            color_value = value
+                            chart
 
-                chart
-    ]
+                        chart.y_value = (value) ->
+                            if not arguments.length
+                                return y_value
+                            y_value = value
+                            chart
+
+                        chart.x_title = (value) ->
+                            if not arguments.length
+                                return x_title
+                            x_title = value
+                            chart
+
+                        chart.y_title = (value) ->
+                            if not arguments.length
+                                return y_title
+                            y_title = value
+                            chart
+
+                        chart.legend_square_size = (value) ->
+                            if not arguments.length
+                                return legend_square_size
+                            legend_square_size = value
+                            chart
+
+                        chart.radius = (value) ->
+                            if not arguments.length
+                                return radius
+                            radius = value
+                            chart
+
+                        chart.x_axis = (value) ->
+                            if not arguments.length
+                                return x_axis
+                            x_axis = value
+                            chart
+
+                        chart.y_axis = (value) ->
+                            if not arguments.length
+                                return y_axis
+                            y_axis = value
+                            chart
+
+                        chart.x_scale = (value) ->
+                            if not arguments.length
+                                return x_scale
+                            x_scale = value
+                            chart
+
+                        chart.y_scale = (value) ->
+                            if not arguments.length
+                                return y_scale
+                            y_scale = value
+                            chart
+
+                        chart
+            }
+]
