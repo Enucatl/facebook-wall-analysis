@@ -33,7 +33,7 @@ angular.module('dondiApp')
                                 author: d.from.name
                                 author_id: d.from.id
                                 time: new Date(d.created_time)
-                                type: d.type
+                                type: if d.type is "swf" then "video" else d.type
                                 message: d.message
                                 description: d.description
                                 id: d.id
