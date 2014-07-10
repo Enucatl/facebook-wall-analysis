@@ -25,6 +25,10 @@ angular.module 'dondiApp'
                         .radius 3
                         .width width
 
+                    scatter
+                        .color_scale()
+                        .domain ["link", "status", "video", "photo", "swf"]
+
                     interval = d3.time.week
                     date_range = d3.extent data, (d) -> d.time
                     intervals = interval.range(
