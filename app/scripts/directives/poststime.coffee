@@ -36,6 +36,7 @@ angular.module 'dondiApp'
                                 type: d.type
                                 message: d.message
                                 description: d.description
+                                id: d.id
                             }
 
                         interval = d3.time.week

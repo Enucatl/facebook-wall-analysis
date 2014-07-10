@@ -106,11 +106,13 @@ angular.module('dondiApp')
                             .remove()
 
                         circles = intervals
-                            .selectAll "circle"
+                            .selectAll "a"
                             .data (d) -> d.posts
 
                         circles
                             .enter()
+                            .append "a"
+                            .attr "xlink:href", (d) -> "http://www.facebook.com/#{d.id.split("_")[0]}/posts/#{d.id.split("_")[1]}"
                             .append "circle"
                             .attr "cy", (d, i) -> y_scale i 
                             .attr "r", radius
