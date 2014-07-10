@@ -9,4 +9,4 @@
 ###
 angular.module('dondiApp')
     .controller 'MainCtrl', ($scope, $http) ->
-        $scope.data_promise = $http.get "data/content.json", {cache: true}
+        $scope.data_promise = $http.get "data/100000203184885.json", {cache: true}
