@@ -3,6 +3,13 @@
     p.lead
       | Big data analysis of the facebook user n. 100000203184885
     p The big brother strikes big.
+
   .row
     .span12
+      h2 All posts, one column per week.
       posts-time(feed-content="data_promise")
+
+  .row
+    .span12
+      h2 Distribution of the time interval between one post and the next
+      time-interval-distribution(feed-content="data_promise")
