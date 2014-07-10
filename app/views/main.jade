@@ -4,12 +4,17 @@
       | Big data analysis of the facebook user n. 100000203184885
     p The big brother strikes big.
 
+  a.btn.pull-right(
+    ng-class="{true: 'btn-primary active', false: 'btn-primary'}[own_posts]"
+    ng-click="own_posts = !own_posts; filterPosts(own_posts)")
+    | Filter by author
+
   .row
     .span12
-      h2 All posts, one column per week.
-      posts-time(feed-content="posts")
+      h2 {{own_posts && 'Only posts by profile owner' || 'All wall posts'}}, one column per week.
+      posts-time(feed-content="shownPosts")
 
   .row
     .span12
       h2 Time between posts.
-      time-interval-distribution(feed-content="posts")
+      time-interval-distribution(feed-content="shownPosts")

@@ -96,7 +96,6 @@ angular.module('dondiApp')
                             .attr "x", (d) -> x_scale d.x
                             .attr "width", x_scale(layout[0].dx) - x_scale(0) - 1
                             .attr "height", (d) -> height - y_scale(d.y) - margin.top - margin.bottom
-                            .transition()
                             .attr "y", (d) -> y_scale d.y
 
                         bars

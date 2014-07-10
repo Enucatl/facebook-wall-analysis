@@ -18,14 +18,11 @@ angular.module 'dondiApp'
                 scope.$watch "data", (data) ->
                     if not data?
                         return
-                    factor = 0.618
                     width = element.parent()[0].offsetWidth
-                    height = factor * width
                     scatter = scatterTime.scatterTime()
                         .x_value (d) -> d.time
                         .color_value (d) -> d.type
                         .radius 3
-                        .height height
                         .width width
 
                     interval = d3.time.week
@@ -41,6 +38,10 @@ angular.module 'dondiApp'
                             posts: data.filter (e) ->
                                 interval.floor(e.time).getTime() == d.getTime()
                         }
+
+                    factor = 2
+                    height = factor * scatter.radius() * (d3.max grouped_data, (d) -> d.posts.length) + scatter.margin().top + scatter.margin().bottom
+                    scatter.height height
 
                     d3.select element[0]
                         .data [grouped_data]

@@ -31,18 +31,12 @@ angular.module('dondiApp')
                 chart = (selection) ->
                     selection.each (data) ->
                             
-                        #get unique color names
-                        #color_names = (data.map color_value).filter (d, i, self) ->
-                            #self.indexOf d == i
-
-                        #color_scale.domain color_names
-
                         #update scales
                         x_scale
                             .domain d3.extent data, (d) -> d.time
                             .rangeRound [0, width - margin.left - margin.right]
                         y_scale
-                            .domain d3.range d3.max data, (d) -> d.posts.length
+                            .domain d3.range 1, 1 + d3.max data, (d) -> d.posts.length
                             .rangePoints [height - margin.top - margin.bottom, 0]
 
 
@@ -105,24 +99,26 @@ angular.module('dondiApp')
                             .exit()
                             .remove()
 
-                        circles = intervals
+                        links = intervals
                             .selectAll "a"
                             .data (d) -> d.posts
 
-                        circles
+                        links
                             .enter()
                             .append "a"
                             .attr "xlink:href", (d) -> "http://www.facebook.com/#{d.id.split("_")[0]}/posts/#{d.id.split("_")[1]}"
                             .append "circle"
-                            .attr "cy", (d, i) -> y_scale i 
+
+                        circles = links.select "circle"
                             .attr "r", radius
+                            .attr "cy", (d, i) -> y_scale i + 1
                             .attr "fill", (d) -> color_scale d.type
                             .append "title"
                             .text (d) -> 
                                 elements = [d.author, d.message, d.description].filter (e) -> e?
                                 elements.join ", "
 
-                        circles
+                        links
                             .exit()
                             .remove()
 
@@ -131,10 +127,11 @@ angular.module('dondiApp')
                             .selectAll "g.legend"
                             .data color_scale.domain()
 
-                        l_enter = legends
+                        legends
                             .enter()
                             .append "g"
                             .classed "legend", true
+                            .attr "transform", (d, i) -> "translate(0, #{(legend_square_size + 2) * i})"
 
                         legends
                             .each (d) ->
@@ -161,9 +158,6 @@ angular.module('dondiApp')
                                     .text (d) -> d
 
                         legends
-                            .attr "transform", (d, i) -> "translate(0, #{(legend_square_size + 2) * i})"
-
-                        legends
                             .exit()
                             .remove()
 
@@ -178,7 +172,7 @@ angular.module('dondiApp')
                                 .attr "transform", "rotate(-65)" 
 
                         y_axis
-                            .tickValues y_scale.domain().filter (d, i) -> not (i % 10)
+                            .tickValues y_scale.domain().filter (d, i) -> not (d % 10)
                         g.select ".y.axis"
                             .transition()
                             .call y_axis
