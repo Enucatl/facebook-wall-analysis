@@ -415,7 +415,6 @@ module.exports = function (grunt) {
       ],
       dist: [
         'coffee',
-        'jade',
         'compass:dist',
         'imagemin',
         'svgmin'
