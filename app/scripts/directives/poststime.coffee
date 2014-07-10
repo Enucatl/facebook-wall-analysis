@@ -18,7 +18,6 @@ angular.module 'dondiApp'
                 scope.data.success (json) ->
                     factor = 0.618
                     width = element.parent()[0].offsetWidth
-                    console.log width
                     height = factor * width
                     scatter = scatterTime.scatterTime()
                         .x_value (d) -> d.time

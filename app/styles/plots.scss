@@ -1,5 +1,15 @@
-.axis path,.axis line {
+.axis path, .axis line {
 	fill: none;
 	stroke: #000;
 	shape-rendering: crispEdges;
+}
+
+rect {
+    fill: steelblue;
+    stroke: none;
+}
+
+.label {
+    font-size: 100%;
+    font-weight: normal;
 }

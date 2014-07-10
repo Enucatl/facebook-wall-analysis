@@ -13,7 +13,7 @@ angular.module('dondiApp')
         # Public API here
         {
             d3Histogram: ->
-                margin = {top: 20, right: 20, bottom: 40, left: 70}
+                margin = {top: 20, right: 20, bottom: 50, left: 70}
                 width = 900
                 height = 600
                 value = (d, i) -> d[0]
