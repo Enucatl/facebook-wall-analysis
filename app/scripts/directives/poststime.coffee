@@ -15,7 +15,9 @@ angular.module 'dondiApp'
                 data: "=feedContent"
             }
             link: (scope, element, attrs) ->
-                scope.data.success (json) ->
+                scope.$watch "data", (data) ->
+                    if not data?
+                        return
                     factor = 0.618
                     width = element.parent()[0].offsetWidth
                     height = factor * width
@@ -26,18 +28,8 @@ angular.module 'dondiApp'
                         .height height
                         .width width
 
-                    digested_data = json.map (d) ->
-                        {
-                            author: d.from.name
-                            time: new Date(d.created_time)
-                            type: d.type
-                            message: d.message
-                            description: d.description
-                            id: d.id
-                        }
-
                     interval = d3.time.week
-                    date_range = d3.extent digested_data, (d) -> d.time
+                    date_range = d3.extent data, (d) -> d.time
                     intervals = interval.range(
                         interval.floor(date_range[0]),
                         interval.ceil(date_range[1])
@@ -46,7 +38,7 @@ angular.module 'dondiApp'
                     grouped_data = intervals.map (d) ->
                         {
                             time: d
-                            posts: digested_data.filter (e) ->
+                            posts: data.filter (e) ->
                                 interval.floor(e.time).getTime() == d.getTime()
                         }
 
