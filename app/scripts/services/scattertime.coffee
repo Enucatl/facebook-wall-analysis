@@ -18,13 +18,12 @@ angular.module('dondiApp')
                 legend_square_size = 18
                 x_scale = d3.time.scale()
                 y_scale = d3.scale.ordinal()
+                x_value = (d) -> d.time
+                y_value = (d, i) -> i + 1
                 color_scale = d3.scale.category20()
+                color_value = (d) -> d.type
                 x_axis = d3.svg.axis()
-                    .scale x_scale
-                    .orient "bottom"
                 y_axis = d3.svg.axis()
-                    .scale y_scale
-                    .orient "left"
                 x_title = undefined
                 y_title = undefined
 
@@ -32,13 +31,13 @@ angular.module('dondiApp')
                     selection.each (data) ->
                             
                         #update scales
-                        x_scale
-                            .domain d3.extent data, (d) -> d.time
-                            .rangeRound [0, width - margin.left - margin.right]
-                        y_scale
-                            .domain d3.range 1, 1 + d3.max data, (d) -> d.posts.length
-                            .rangePoints [height - margin.top - margin.bottom, 0]
+                        x_axis 
+                            .scale x_scale
+                            .orient "bottom"
 
+                        y_axis
+                            .scale y_scale
+                            .orient "left"
 
                         #select the svg if it exists
                         svg = d3.select this
@@ -93,7 +92,7 @@ angular.module('dondiApp')
                             .enter()
                             .append "g"
                             .classed "interval", true
-                            .attr "transform", (d) -> "translate(#{x_scale d.time}, 0)"
+                            .attr "transform", (d) -> "translate(#{x_scale x_value d}, 0)"
 
                         intervals
                             .exit()
@@ -111,8 +110,8 @@ angular.module('dondiApp')
 
                         circles = links.select "circle"
                             .attr "r", radius
-                            .attr "cy", (d, i) -> y_scale i + 1
-                            .attr "fill", (d) -> color_scale d.type
+                            .attr "cy", (d, i) -> y_scale y_value d, i
+                            .attr "fill", (d) -> color_scale color_value d
                             .append "title"
                             .text (d) -> 
                                 elements = [d.author, d.message, d.description].filter (e) -> e?
@@ -205,6 +204,12 @@ angular.module('dondiApp')
                     if not arguments.length
                         return color_value
                     color_value = value
+                    chart
+
+                chart.color_scale = (value) ->
+                    if not arguments.length
+                        return color_scale
+                    color_scale = value
                     chart
 
                 chart.y_value = (value) ->

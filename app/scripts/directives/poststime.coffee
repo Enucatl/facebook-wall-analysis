@@ -44,8 +44,17 @@ angular.module 'dondiApp'
                         }
 
                     factor = 2
-                    height = factor * scatter.radius() * (d3.max grouped_data, (d) -> d.posts.length) + scatter.margin().top + scatter.margin().bottom
+                    maximum_posts = d3.max grouped_data, (d) -> d.posts.length
+                    height = factor * scatter.radius() * maximum_posts + scatter.margin().top + scatter.margin().bottom
                     scatter.height height
+                    margin = scatter.margin()
+
+                    scatter.x_scale()
+                        .domain d3.extent grouped_data, (d) -> d.time
+                        .rangeRound [0, width - margin.left - margin.right]
+                    scatter.y_scale()
+                        .domain d3.range 1, 1 + maximum_posts
+                        .rangePoints [height - margin.top - margin.bottom, 0]
 
                     d3.select element[0]
                         .data [grouped_data]
