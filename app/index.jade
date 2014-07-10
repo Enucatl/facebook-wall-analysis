@@ -15,12 +15,7 @@ head
   // endbuild 
   body(ng-app='dondiApp')
     //if lt IE 7
-      p.browsehappy
-        | You are using an
-        strong outdated
-        | browser. Please
-        a(href='http://browsehappy.com/') upgrade your browser
-        | to improve your experience.
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     // Add your site or application content here 
     .container
       .header
@@ -39,8 +34,8 @@ head
           | from the Yeoman team
     // build:js(.) scripts/oldieshim.js 
     //if lt IE 9
-      script(src='bower_components/es5-shim/es5-shim.js')
-      script(src='bower_components/json3/lib/json3.min.js')
+      <script src="bower_components/es5-shim/es5-shim.js"></script>
+      <script src="bower_components/json3/lib/json3.min.js"></script>
     // endbuild 
     // build:js(.) scripts/vendor.js 
     // bower:js 
