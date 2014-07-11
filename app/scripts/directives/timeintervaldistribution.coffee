@@ -39,10 +39,38 @@ angular.module('dondiApp')
                     histogram
                         .x_axis().scale histogram.x_scale()
                         .tickFormat d3.time.format "%H"
+
+                    margin = histogram.margin()
+                    
                     d3.select element[0]
                         .data [difference_data.filter (d) ->
                             d.time < new Date(2012, 0, 2, 0, 0, 0, 0)]
                         .call histogram
+
+                    overflow = difference_data.reduce((total, d) ->
+                            if d.time > new Date(2012, 0, 2, 0, 0, 0, 0) then total + 1 else total
+                        , 0)
+
+                    overflow_text = d3.select element[0]
+                        .select "svg"
+                        .selectAll "text.overflow"
+                        .data [overflow]
+
+                    overflow_text
+                        .enter()
+                        .append "text"
+
+                    overflow_text
+                        .classed "overflow", true
+                        .attr "x", width - margin.left - margin.right
+                        .attr "y", margin.top
+                        .attr "dy", "0.35em"
+                        .style "text-anchor", "end"
+                        .text (d) -> "+#{d} more than one day apart"
+
+                    overflow_text
+                        .exit()
+                        .remove()
                         
     ]
 )
