@@ -29,10 +29,10 @@ angular.module('dondiApp')
                     selection.each (data) ->
                             
                         arc = d3.svg.arc()
-                            .outerRadius 0.7 * radius
-                            .innerRadius 0.5 * radius
+                            .outerRadius 0.8 * radius
+                            .innerRadius 0.6 * radius
 
-                        label_radius = 0.75 * radius
+                        label_radius = 0.85 * radius
 
                         #select the svg if it exists
                         svg = d3.select this
@@ -42,6 +42,7 @@ angular.module('dondiApp')
                         #otherwise create the skeletal chart
                         g_enter = svg.enter()
                             .append "svg"
+                            .style "overflow", "visible"
                             .append "g"
 
                         g_enter.append "g"
