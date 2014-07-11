@@ -21,12 +21,18 @@ angular.module('dondiApp')
                 color_scale = d3.scale.ordinal()
                     .range ["#a50026", "#d73027", "#f46d43", "#fdae61", "#fee090", "#ffffbf", "#e0f3f8", "#abd9e9", "#74add1", "#4575b4", "#313695"]
 
+                angle = (d) ->
+                    a = (d.startAngle + d.endAngle) * 90 / Math.PI - 90
+                    if a > 90 then a - 180 else a
+
                 chart = (selection) ->
                     selection.each (data) ->
                             
                         arc = d3.svg.arc()
-                            .outerRadius 0.9 * radius
-                            .innerRadius 0.7 * radius
+                            .outerRadius 0.7 * radius
+                            .innerRadius 0.5 * radius
+
+                        label_radius = 0.75 * radius
 
                         #select the svg if it exists
                         svg = d3.select this
@@ -78,9 +84,15 @@ angular.module('dondiApp')
 
                         arc_groups
                             .select "text"
-                            .attr "transform", (d) -> "translate(#{arc.centroid d})"
+                            .attr "transform", (d) ->
+                                c = arc.centroid d
+                                x = c[0]
+                                y = c[1]
+                                h = Math.sqrt x * x + y * y
+                                "translate(#{x / h * label_radius}, #{y / h * label_radius}) rotate(#{angle d})"
                             .attr "dy", ".35em"
-                            .style "text-anchor", "middle"
+                            .style "text-anchor", (d) ->
+                                if (d.endAngle + d.startAngle) / 2 > Math.PI then "end" else "start"
                             .text (d) -> color_value d
 
                         arc_groups
