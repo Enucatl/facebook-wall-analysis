@@ -1,23 +1,26 @@
 .jumbotron
   h1 User 10***85
     p.lead
-      | Big data analysis of the facebook user n. 100000**3184885
-    p The big brother strikes big.
+      | Analysis of the facebook user n. 100000**3184885
+    p Click on the post to see it on facebook.
 
-  a.btn.pull-right(
-    ng-class="{true: 'btn-primary active', false: 'btn-primary'}[own_posts]"
-    ng-click="own_posts = !own_posts; filterPosts(own_posts)")
-    | Filter by author
 
   .row
     .span12
-      h2 {{own_posts && 'Only posts by profile owner' || 'All wall posts'}}, one column per week.
-      posts-time(feed-content="groupedPosts")
+      a.btn.pull-right(
+        ng-class="{true: 'btn-primary active', false: 'btn-primary'}[own_posts]"
+        ng-click="own_posts = !own_posts; filterPosts(own_posts)")
+        | Filter by author
 
   .row
     .span12
-      h2 Posts during the day with size as number of comments
+      h2 Posts during the day with size proportional to the number of comments
       time-of-day(feed-content="groupedPosts")
+
+  .row
+    .span12
+      h2 {{own_posts && 'Only posts by profile owner' || 'All wall posts'}}. Number of posts per week
+      posts-time(feed-content="groupedPosts")
 
   .row
     .span12
