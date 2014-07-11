@@ -52,7 +52,6 @@ angular.module('dondiApp')
                         interval.ceil(date_range[1])
                     )
 
-
                     d3.select element[0]
                         .data [data]
                         .call scatter
