@@ -12,7 +12,12 @@
   .row
     .span12
       h2 {{own_posts && 'Only posts by profile owner' || 'All wall posts'}}, one column per week.
-      posts-time(feed-content="shownPosts")
+      posts-time(feed-content="groupedPosts")
+
+  .row
+    .span12
+      h2 Posts during the day with size as number of comments
+      time-of-day(feed-content="groupedPosts")
 
   .row
     .span12

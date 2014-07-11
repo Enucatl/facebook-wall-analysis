@@ -114,7 +114,12 @@ angular.module('dondiApp')
                             .attr "fill", (d) -> color_scale color_value d
                             .append "title"
                             .text (d) -> 
-                                elements = [d.author, d.message, d.description].filter (e) -> e?
+                                elements = [
+                                    "Author: #{d.author}"
+                                    "#{d.n_comments} comments"
+                                    d.message
+                                    d.description
+                                ].filter (e) -> e?
                                 elements.join ", "
 
                         links
@@ -170,8 +175,6 @@ angular.module('dondiApp')
                                 .attr "dy", ".15em" 
                                 .attr "transform", "rotate(-65)" 
 
-                        y_axis
-                            .tickValues y_scale.domain().filter (d, i) -> not (d % 10)
                         g.select ".y.axis"
                             .transition()
                             .call y_axis
