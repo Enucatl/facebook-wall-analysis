@@ -29,7 +29,7 @@ angular.module('dondiApp')
                             d3.time.second.offset(day_begins, (d.time - d3.time.day d.time) / 1000)
                         .color_value (d) ->
                             if d.author_id is "100000203184885" then "profile owner" else "guests"
-                        .radius (d) -> d.n_comments
+                        .radius (d) -> 1 + d.n_comments
                         .width width
                         .height height
 
