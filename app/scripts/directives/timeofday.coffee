@@ -21,12 +21,16 @@ angular.module('dondiApp')
                     width = element.parent()[0].offsetWidth
                     factor = 0.618
                     height = factor * width
-                    day_begins = new Date(2012, 0, 1, 0, 0, 0, 0)
-                    day_ends = new Date(2012, 0, 2, 0, 0, 0, 0)
+                    day_begins = new Date(2012, 0, 1, 6, 0, 0, 0)
+                    day_ends = new Date(2012, 0, 2, 6, 0, 0, 0)
+                    hours_since_day_begins = (day_begins - d3.time.day day_begins)
                     scatter = scatterTime.scatterTime()
                         .x_value (d) -> d.time
                         .y_value (d) ->
-                            d3.time.second.offset(day_begins, (d.time - d3.time.day d.time) / 1000)
+                            if d.time.getHours() < day_begins.getHours()
+                                return d3.time.day.offset((d3.time.day(day_begins).getTime() + (d.time - d3.time.day d.time)), 1)
+                            else
+                                return d3.time.day(day_begins).getTime() + (d.time - d3.time.day d.time)
                         .color_value (d) ->
                             if d.author_id is "100000203184885" then "profile owner" else "guests"
                         .radius (d) -> 1 + d.n_comments
